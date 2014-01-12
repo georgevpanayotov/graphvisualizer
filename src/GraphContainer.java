@@ -86,11 +86,32 @@ public class GraphContainer extends JComponent implements VertexComponentDelegat
 
     private void drawArrow(Graphics g, Rectangle source, Rectangle destination)
     {
-        g.drawLine(
-            source.x + (source.width / 2),
-            source.y + (source.height / 2),
-            destination.x + (destination.width / 2),
-            destination.y + (destination.height / 2));
+        int sourceX      = source.x        + (source.width / 2);
+        int sourceY      = source.y        + (source.height / 2);
+        int destinationX = destination.x   + (destination.width / 2);
+        int destinationY = destination.y   + (destination.height / 2);
 
+        double dx = destinationX - sourceX;
+        double dy = destinationY - sourceY;
+        double magnitude = Math.sqrt( dx * dx + dy * dy);
+
+        // <dx, dy> is now a unit vector
+        dx /= magnitude;
+        dy /= magnitude;
+
+        // the fraction of the line to trim from the source and destination respectively
+        double trimFromSource = 0.05;
+        double trimFromDestination = 0.1;
+
+        sourceX      = (int)((double)sourceX      + (dx * trimFromSource * magnitude));
+        sourceY      = (int)((double)sourceY      + (dy * trimFromSource * magnitude));
+        destinationX = (int)((double)destinationX - (dx * trimFromDestination * magnitude));
+        destinationY = (int)((double)destinationY - (dy * trimFromDestination * magnitude));
+
+        g.drawLine(
+        sourceX,
+        sourceY,
+        destinationX,
+        destinationY);
     }
 }
