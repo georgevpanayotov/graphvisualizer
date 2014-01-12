@@ -1,17 +1,17 @@
 import javax.swing.JComponent;
 import java.util.Set;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.JLabel;
+import java.awt.Rectangle;
 
 public class GraphContainer extends JComponent
 {
     private Digraph<String> graph;
-    private Set<String> vertices;
-    private ArrayList<VertexComponent> vertexComponents;
+    private HashMap<String, VertexComponent> vertexComponents;
 
     public GraphContainer(Digraph<String> newGraph)
     {
@@ -19,19 +19,18 @@ public class GraphContainer extends JComponent
 
         this.graph = newGraph;
 
-        this.vertices = this.graph.vertices();
-        this.vertexComponents = new ArrayList<VertexComponent>(this.vertices.size());
+        this.vertexComponents = new HashMap<String, VertexComponent>(this.graph.vertices().size());
 
         VertexComponent component = null;
 
         this.setSize(500, 500);
 
         int i = 0;
-        int size = this.vertices.size();
-        for(String vertex : this.vertices)
+        int size = this.graph.vertices().size();
+        for(String vertex : this.graph.vertices())
         {
             component = new VertexComponent(vertex);
-            this.vertexComponents.add(component);
+            this.vertexComponents.put(vertex, component);
 
             double theta = (((double) i) * 2 * Math.PI) / ((double)size);
             double x = 200 * Math.cos(theta) + 250;
@@ -40,7 +39,6 @@ public class GraphContainer extends JComponent
             this.add(component);
 
             Dimension componentDim = component.getPreferredSize();
-            System.out.println("width = " + componentDim.width + " height = " + componentDim.height);
             component.setBounds(
             (int)x,
             (int)y,
@@ -53,7 +51,36 @@ public class GraphContainer extends JComponent
         this.setVisible(true);
         this.revalidate();
         this.repaint();
-        // TODO: create arrow containers for each out-edge. Need another class for that.
-        // TODO: helper method to draw them
+    }
+
+//
+//  @category subclassing
+//
+    public void paint(Graphics g)
+    {
+        super.paint(g);
+        for (String vertex : this.graph.vertices())
+        {
+            for(String destVertex : this.graph.outEdges(vertex))
+            {
+                this.drawArrow(g,
+                    this.vertexComponents.get(vertex).getBounds(),
+                    this.vertexComponents.get(destVertex).getBounds());
+            }
+        }
+    }
+
+//
+//  @category helpers
+//
+
+    public void drawArrow(Graphics g, Rectangle source, Rectangle destination)
+    {
+        g.drawLine(
+            source.x + (source.width / 2),
+            source.y + (source.height / 2),
+            destination.x + (destination.width / 2),
+            destination.y + (destination.height / 2));
+
     }
 }
