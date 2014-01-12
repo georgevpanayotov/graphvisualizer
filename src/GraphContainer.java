@@ -31,6 +31,7 @@ public class GraphContainer extends JComponent implements VertexComponentDelegat
         {
             component = new VertexComponent(vertex);
             this.vertexComponents.put(vertex, component);
+            component.setDelegate(this);
 
             double theta = (((double) i) * 2 * Math.PI) / ((double)size);
             double x = 200 * Math.cos(theta) + 250;
