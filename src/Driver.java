@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.JFrame;
 
 public class Driver
 {
@@ -14,21 +15,15 @@ public class Driver
                 GraphParser parser = new GraphParser(fs);
                 Digraph<String> graph = parser.read();
 
-                for(String vertex : graph.vertices())
-                {
-                    System.out.print(vertex);
-                    System.out.print(" <- ");
+                // create the graph container to visualize this graph
+                GraphContainer graphContainer = new GraphContainer(graph);
 
-                    List<String> edges = graph.inEdges(vertex);
-
-                    for(String vertex2 : edges)
-                    {
-                        System.out.print(vertex2);
-                        System.out.print(" ");
-                    }
-
-                    System.out.println("");
-                }
+                // Frame will be the main window
+                JFrame frame =  new JFrame("Graph Visualizer");
+                frame.setSize(500, 500);
+                frame.getContentPane().add(graphContainer);
+                frame.setVisible(true);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
             catch(IOException iox)
             {

@@ -2,6 +2,10 @@ import javax.swing.JComponent;
 import java.util.Set;
 import java.util.ArrayList;
 import java.awt.Point;
+import java.awt.Graphics;
+import java.awt.FlowLayout;
+import java.awt.Dimension;
+import javax.swing.JLabel;
 
 public class GraphContainer extends JComponent
 {
@@ -11,6 +15,8 @@ public class GraphContainer extends JComponent
 
     public GraphContainer(Digraph<String> newGraph)
     {
+        this.setLayout(null);
+
         this.graph = newGraph;
 
         this.vertices = this.graph.vertices();
@@ -28,13 +34,25 @@ public class GraphContainer extends JComponent
             this.vertexComponents.add(component);
 
             double theta = (((double) i) * 2 * Math.PI) / ((double)size);
-            double x = 100 * Math.cos(theta) + 250;
-            double y = 100 * Math.sin(theta) + 250;
+            double x = 200 * Math.cos(theta) + 250;
+            double y = 200 * Math.sin(theta) + 250;
 
-            component.setLocation(new Point((int)x, (int)y));
-            i ++;
+            this.add(component);
+
+            Dimension componentDim = component.getPreferredSize();
+            System.out.println("width = " + componentDim.width + " height = " + componentDim.height);
+            component.setBounds(
+            (int)x,
+            (int)y,
+            componentDim.width,
+            componentDim.height);
+
+            i++;
         }
 
+        this.setVisible(true);
+        this.revalidate();
+        this.repaint();
         // TODO: create arrow containers for each out-edge. Need another class for that.
         // TODO: helper method to draw them
     }

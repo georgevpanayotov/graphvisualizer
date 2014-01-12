@@ -4,6 +4,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Point;
 import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 public class VertexComponent extends JComponent implements MouseListener
 {
@@ -16,9 +19,28 @@ public class VertexComponent extends JComponent implements MouseListener
     {
         this.addMouseListener(this);
         this.vertex = vertex;
-        this.setSize(200, 200);
+
         this.label = new JLabel(this.vertex);
         this.add(this.label);
+        Dimension size = this.label.getPreferredSize();
+        this.label.setBounds(0, 0,
+        size.width, size.height);
+
+        this.revalidate();
+        this.repaint();
+        this.setVisible(true);
+        this.setBackground(Color.RED);
+        this.setLayout(null);
+        this.setEnabled(true);
+    }
+
+//
+// @category subclassing JComponent
+//
+
+    public Dimension getPreferredSize()
+    {
+        return this.label.getPreferredSize();
     }
 
 //
@@ -45,14 +67,14 @@ public class VertexComponent extends JComponent implements MouseListener
 
     public void mouseReleased(MouseEvent e)
     {
-        if(!this.dragging)
+        if(this.dragging)
         {
             this.dragging = false;
 
             Point delta = new Point((int)(e.getX() - this.pressedPoint.getX()), (int)(e.getY() - this.pressedPoint.getY()));
             Point newLocation = this.getLocation();
             newLocation.translate((int)delta.getX(), (int)delta.getY());
-            this.setLocation(newLocation);
+            this.setBounds((int)newLocation.getX(), (int)newLocation.getY(), this.getWidth(), this.getHeight());
         }
     }
 }
