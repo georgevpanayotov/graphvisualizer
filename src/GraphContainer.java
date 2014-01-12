@@ -100,18 +100,53 @@ public class GraphContainer extends JComponent implements VertexComponentDelegat
         dy /= magnitude;
 
         // the fraction of the line to trim from the source and destination respectively
-        double trimFromSource = 0.05;
-        double trimFromDestination = 0.1;
+        double trimFromSource = 35;
+        double trimFromDestination = 35;
 
-        sourceX      = (int)((double)sourceX      + (dx * trimFromSource * magnitude));
-        sourceY      = (int)((double)sourceY      + (dy * trimFromSource * magnitude));
-        destinationX = (int)((double)destinationX - (dx * trimFromDestination * magnitude));
-        destinationY = (int)((double)destinationY - (dy * trimFromDestination * magnitude));
+        // trim the source[xy] and destination [xy] so the lines don't go all the way to the center
+        // of the label
+        sourceX      = (int)((double)sourceX      + (dx * trimFromSource));
+        sourceY      = (int)((double)sourceY      + (dy * trimFromSource));
+        destinationX = (int)((double)destinationX - (dx * trimFromDestination));
+        destinationY = (int)((double)destinationY - (dy * trimFromDestination));
+
+        // draw the main line of the arrow
+        g.drawLine(
+            sourceX,
+            sourceY,
+            destinationX,
+            destinationY);
+
+        // get the vector -<dx, dy> and rotate it 30 deg (pi/6 rad) and -30 deg to create
+        // the 'wings' or the arrow
+        double wingSize = 5;
+        double wingX = rotateX(Math.PI / 6, -dx, -dy);
+        double wingY = rotateY(Math.PI / 6, -dx, -dy);
 
         g.drawLine(
-        sourceX,
-        sourceY,
-        destinationX,
-        destinationY);
+            destinationX,
+            destinationY,
+            (int)(destinationX + wingSize * wingX),
+            (int)(destinationY + wingSize * wingY));
+
+        wingX = rotateX(-Math.PI / 6, -dx, -dy);
+        wingY = rotateY(-Math.PI / 6, -dx, -dy);
+
+        g.drawLine(
+            destinationX,
+            destinationY,
+            (int)(destinationX + wingSize * wingX),
+            (int)(destinationY + wingSize * wingY));
+    }
+
+    // rotates vector <x, y> by angle (radians) and returns the x component of the new vector
+    double rotateX(double angle, double x, double y)
+    {
+        return x * Math.cos(angle) - y * Math.sin(angle);
+    }
+
+    double rotateY(double angle, double x, double y)
+    {
+        return x * Math.sin(angle) + y * Math.cos(angle);
     }
 }
