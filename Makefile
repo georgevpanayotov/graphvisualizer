@@ -10,4 +10,5 @@ files=src/Digraph.java \
     src/VertexComponentDelegate.java
 
 all:
+	mkdir -p bin
 	$(javac) $(jflags) $(files)
