@@ -8,7 +8,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.Rectangle;
 
-public class GraphContainer extends JComponent
+public class GraphContainer extends JComponent implements VertexComponentDelegate
 {
     private Digraph<String> graph;
     private HashMap<String, VertexComponent> vertexComponents;
@@ -71,10 +71,19 @@ public class GraphContainer extends JComponent
     }
 
 //
+// @category VertexComponentDelegate methods
+//
+
+    public void vertexMoved(VertexComponent v)
+    {
+        this.repaint();
+    }
+
+//
 //  @category helpers
 //
 
-    public void drawArrow(Graphics g, Rectangle source, Rectangle destination)
+    private void drawArrow(Graphics g, Rectangle source, Rectangle destination)
     {
         g.drawLine(
             source.x + (source.width / 2),

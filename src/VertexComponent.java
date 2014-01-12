@@ -14,6 +14,7 @@ public class VertexComponent extends JComponent implements MouseMotionListener
     private Point lastPoint;
     private String vertex;
     private JLabel label;
+    private WeakReference<VertexComponentDelegate> delegate;
 
     public VertexComponent(String vertex)
     {
@@ -34,6 +35,33 @@ public class VertexComponent extends JComponent implements MouseMotionListener
         this.setEnabled(true);
     }
 
+//
+// @category public methods
+//
+
+    public void setDelegate(VertexComponentDelegate delegateObject)
+    {
+        this.delegate = new WeakReference<VertexComponentDelegate>(delegateObject);
+    }
+
+    public VertexComponentDelegate getDelegate()
+    {
+        if(this.delegate != null)
+        {
+            VertexComponentDelegate delegateObject = this.delegate.get();
+            if(delegateObject != null)
+            {
+                return delegateObject;
+            }
+            else
+            {
+                // the weak reference has been released. So forget the WeakReference object
+                this.delegate = null;
+            }
+        }
+
+        return null;
+    }
 //
 // @category subclassing JComponent
 //
@@ -59,6 +87,12 @@ public class VertexComponent extends JComponent implements MouseMotionListener
             Point newLocation = this.getLocation();
             newLocation.translate((int)delta.getX(), (int)delta.getY());
             this.setBounds((int)newLocation.getX(), (int)newLocation.getY(), this.getWidth(), this.getHeight());
+
+            VertexComponentDelegate delegateObject = this.getDelegate();
+            if(delegateObject != null)
+            {
+                delegateObject.vertexMoved(this);
+            }
         }
     }
 
@@ -66,5 +100,4 @@ public class VertexComponent extends JComponent implements MouseMotionListener
     {
 
     }
-
 }

@@ -6,8 +6,8 @@ files=src/Digraph.java \
 	src/GraphParser.java \
     src/Driver.java \
     src/VertexComponent.java \
-    src/GraphContainer.java
-
+    src/GraphContainer.java \
+    src/VertexComponentDelegate.java
 
 all:
 	$(javac) $(jflags) $(files)
