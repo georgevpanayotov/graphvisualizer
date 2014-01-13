@@ -7,11 +7,13 @@ import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.Rectangle;
+import java.awt.Color;
 
 public class GraphContainer extends JComponent implements VertexComponentDelegate
 {
     private Digraph<String> graph;
     private HashMap<String, VertexComponent> vertexComponents;
+    private static final int ORANGE = 0xF7DDC1;
 
     public GraphContainer(Digraph<String> newGraph)
     {
@@ -59,7 +61,15 @@ public class GraphContainer extends JComponent implements VertexComponentDelegat
 //
     public void paint(Graphics g)
     {
+        g.setColor(new Color(GraphContainer.ORANGE));
+        g.fillRect(
+            0,
+            0,
+            this.getWidth(),
+            this.getHeight());
         super.paint(g);
+
+        g.setColor(Color.BLACK);
         for (String vertex : this.graph.vertices())
         {
             for(String destVertex : this.graph.outEdges(vertex))
