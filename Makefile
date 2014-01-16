@@ -16,9 +16,11 @@ classfiles=-C bin Digraph.class \
            -C bin GraphContainer.class \
            -C bin VertexComponentDelegate.class
 
-all:
+all: class
+	jar -cfm bin/GraphVis.jar Manifest $(classfiles)
+
+class:
 	mkdir -p bin
 	$(javac) $(jflags) $(files)
 
-jar: all
-	jar -cfm bin/GraphVis.jar Manifest $(classfiles)
+
