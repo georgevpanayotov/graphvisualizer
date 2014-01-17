@@ -130,8 +130,9 @@ public class GraphContainer extends JComponent implements VertexComponentDelegat
         // get the vector -<dx, dy> and rotate it 30 deg (pi/6 rad) and -30 deg to create
         // the 'wings' or the arrow
         double wingSize = 5;
-        double wingX = rotateX(Math.PI / 6, -dx, -dy);
-        double wingY = rotateY(Math.PI / 6, -dx, -dy);
+        double wingAngle = Math.PI / 6;
+        double wingX = rotateX(wingAngle, -dx, -dy);
+        double wingY = rotateY(wingAngle, -dx, -dy);
 
         g.drawLine(
             destinationX,
@@ -139,8 +140,8 @@ public class GraphContainer extends JComponent implements VertexComponentDelegat
             (int)(destinationX + wingSize * wingX),
             (int)(destinationY + wingSize * wingY));
 
-        wingX = rotateX(-Math.PI / 6, -dx, -dy);
-        wingY = rotateY(-Math.PI / 6, -dx, -dy);
+        wingX = rotateX(-wingAngle, -dx, -dy);
+        wingY = rotateY(-wingAngle, -dx, -dy);
 
         g.drawLine(
             destinationX,
